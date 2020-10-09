@@ -9,6 +9,7 @@ import shlex
 import requests
 
 import argparse
+from constants import VERSION
 from alive_progress import alive_bar, config_handler
 
 INVALID_TOKEN_MSG = "Error: Gitlab token is required.\nGet your token at %s/profile/personal_access_tokens or pass --help for get full help"
@@ -48,7 +49,7 @@ def fg(text, color): return ("\33[38;5;" + str(color) + "m" + text + "\33[0m")
 
 def git_clone(args, project_url, dir_name):
     try:
-        command = f"git clone {project_url} {dir_name}"
+        command = f"git clone --mirror {project_url} {dir_name}.git"
         if not args.verbose:
             command += " -q"
         command = shlex.split(command)
@@ -78,7 +79,7 @@ def main():
     optional.add_argument("-o", "--output", type=str, metavar='str',
                         help="Output directory (defaults to ./gitlab-backup)")
 
-    optional.add_argument("-v", "--version", action='version', version='%(prog)s')
+    optional.add_argument("-v", "--version", action='version', version=VERSION)
     
 
     optional.add_argument(
